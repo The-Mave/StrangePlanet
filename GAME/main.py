@@ -19,7 +19,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-
+#comment
 pygame.display.update()
 pygame.quit()
 
