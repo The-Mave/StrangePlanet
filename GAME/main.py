@@ -14,7 +14,7 @@ while True:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            pygame.joystick.quit() 
     
 # DEBUG options
     
@@ -30,7 +30,11 @@ while True:
         screen.blit(theFont.render(FPS + ' - FPS', 1, (255, 255, 255)),(5, 5))
 
 
+
     pygame.display.flip()
+
+
+#teste
     
 
 
