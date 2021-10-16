@@ -14,6 +14,9 @@ GRIDHEIGHT = HEIGHT/TILESIZE
 tickrate = pygame.time.get_ticks()
 clock = pygame.time.Clock()
 
+# --------------- COMMANDS SETTINGS
+
+keys = pygame.key.get_pressed() #Para capturar as teclas pressionadas
 
 # --------------- DEVELOPER MODE
 
