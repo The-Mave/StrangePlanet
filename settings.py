@@ -27,7 +27,7 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 PLAYER_HEALTH = 100
 PLAYER_SPEED = 280
 PLAYER_ROT_SPEED = 200
-PLAYER_IMG = 'manBlue_gun.png'
+PLAYER_IMG = 'player_sheet.png'
 PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
 BARREL_OFFSET = vec(30, 10)
 
@@ -52,7 +52,7 @@ WEAPONS['shotgun'] = {'bullet_speed': 400,
                       'bullet_count': 12}
 
 # Mob settings
-MOB_IMG = 'zombie1_hold.png'
+MOB_IMG = 'alien.png'
 MOB_SPEEDS = [150, 100, 75, 125]
 MOB_HIT_RECT = pg.Rect(0, 0, 30, 30)
 MOB_HEALTH = 100
