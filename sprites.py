@@ -4,7 +4,10 @@ from settings import *
 from tilemap import collide_hit_rect
 import pytweening as tween
 from itertools import chain
+import math
 vec = pg.math.Vector2
+
+index = 0
 
 def collide_with_walls(sprite, group, dir):
     if dir == 'x':
@@ -46,17 +49,22 @@ class Player(pg.sprite.Sprite):
         self.damaged = False
 
     def get_keys(self):
+        global index
         self.rot_speed = 0
         self.vel = vec(0, 0)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.rot_speed = PLAYER_ROT_SPEED
+            index = (index + 0.1) % 3
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.rot_speed = -PLAYER_ROT_SPEED
+            index = (index + 0.1) % 3
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel = vec(PLAYER_SPEED, 0).rotate(-self.rot)
+            index = (index + 0.1) % 3
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel = vec(-PLAYER_SPEED / 2, 0).rotate(-self.rot)
+            index = (index + 0.1) % 3
         if keys[pg.K_SPACE]:
             self.shoot()
 
@@ -81,14 +89,26 @@ class Player(pg.sprite.Sprite):
         self.damage_alpha = chain(DAMAGE_ALPHA * 4)
 
     def update(self):
+        if self.rot <= 22.5 or self.rot > 337.5:
+            self.image = self.game.player_e[math.trunc(index)]
+        if self.rot <= 67.5 and self.rot > 22.5:
+            self.image = self.game.player_ne[math.trunc(index)]
+        if self.rot <= 112.5 and self.rot > 67.5:
+            self.image = self.game.player_n[math.trunc(index)]
+        if self.rot <= 157.5 and self.rot > 112.5:
+            self.image = self.game.player_nw[math.trunc(index)]
+        if self.rot <= 202.5 and self.rot > 157.5:
+            self.image = self.game.player_w[math.trunc(index)]
+        if self.rot <= 247.5 and self.rot > 202.5:
+            self.image = self.game.player_sw[math.trunc(index)]
+        if self.rot <= 292.5 and self.rot > 247.5:
+            self.image = self.game.player_s[math.trunc(index)]
+        if self.rot <= 337.5 and self.rot > 292.5:
+            self.image = self.game.player_se[math.trunc(index)]
+
         self.get_keys()
         self.rot = (self.rot + self.rot_speed * self.game.dt) % 360
-        self.image = pg.transform.rotate(self.game.player_img, self.rot)
-        if self.damaged:
-            try:
-                self.image.fill((255, 255, 255, next(self.damage_alpha)), special_flags=pg.BLEND_RGBA_MULT)
-            except:
-                self.damaged = False
+        self.image = pg.transform.rotate(self.image, 0)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
         self.pos += self.vel * self.game.dt
@@ -136,7 +156,7 @@ class Mob(pg.sprite.Sprite):
             if random() < 0.002:
                 choice(self.game.zombie_moan_sounds).play()
             self.rot = target_dist.angle_to(vec(1, 0))
-            self.image = pg.transform.rotate(self.game.mob_img, self.rot)
+            self.image = pg.transform.rotate(self.game.mob_img, 0)
             self.rect.center = self.pos
             self.acc = vec(1, 0).rotate(-self.rot)
             self.avoid_mobs()

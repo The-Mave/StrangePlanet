@@ -6,6 +6,9 @@ from os import path
 from settings import *
 from sprites import *
 from tilemap import *
+from spritesheet import Spritesheet
+
+index = 0
 
 def draw_player_health(surf, x, y, pct):
     if pct < 0:
@@ -50,6 +53,16 @@ class Game:
         self.dim_screen = pg.Surface(self.screen.get_size()).convert_alpha()
         self.dim_screen.fill((0, 0, 0, 180))
         self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
+        self.player_spritesheet = Spritesheet(PLAYER_IMG)
+        self.player_s = [self.player_spritesheet.parse_sprite('player_s1.png'), self.player_spritesheet.parse_sprite('player_s2.png'),self.player_spritesheet.parse_sprite('player_s3.png')]
+        self.player_sw = [self.player_spritesheet.parse_sprite('player_sw1.png'), self.player_spritesheet.parse_sprite('player_sw2.png'),self.player_spritesheet.parse_sprite('player_sw3.png')]
+        self.player_w = [self.player_spritesheet.parse_sprite('player_w1.png'), self.player_spritesheet.parse_sprite('player_w2.png'),self.player_spritesheet.parse_sprite('player_w3.png')]
+        self.player_nw = [self.player_spritesheet.parse_sprite('player_nw1.png'), self.player_spritesheet.parse_sprite('player_nw2.png'),self.player_spritesheet.parse_sprite('player_nw3.png')]
+        self.player_n = [self.player_spritesheet.parse_sprite('player_n1.png'), self.player_spritesheet.parse_sprite('player_n2.png'),self.player_spritesheet.parse_sprite('player_n3.png')]
+        self.player_ne = [self.player_spritesheet.parse_sprite('player_ne1.png'), self.player_spritesheet.parse_sprite('player_ne2.png'),self.player_spritesheet.parse_sprite('player_ne3.png')]
+        self.player_e = [self.player_spritesheet.parse_sprite('player_e1.png'), self.player_spritesheet.parse_sprite('player_e2.png'),self.player_spritesheet.parse_sprite('player_e3.png')]
+        self.player_se = [self.player_spritesheet.parse_sprite('player_se1.png'), self.player_spritesheet.parse_sprite('player_se2.png'),self.player_spritesheet.parse_sprite('player_se3.png')]
+        self.player_img = self.player_s[index]
         self.bullet_images = {}
         self.bullet_images['lg'] = pg.image.load(path.join(img_folder, BULLET_IMG)).convert_alpha()
         self.bullet_images['sm'] = pg.transform.scale(self.bullet_images['lg'], (10, 10))
@@ -99,7 +112,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.items = pg.sprite.Group()
-        self.map = TiledMap(path.join(self.map_folder, 'level1.tmx'))
+        self.map = TiledMap(path.join(self.map_folder, 'mapa.tmx'))
         self.map_img = self.map.make_map()
         self.map.rect = self.map_img.get_rect()
         for tile_object in self.map.tmxdata.objects:
@@ -107,7 +120,7 @@ class Game:
                              tile_object.y + tile_object.height / 2)
             if tile_object.name == 'player':
                 self.player = Player(self, obj_center.x, obj_center.y)
-            if tile_object.name == 'zombie':
+            if tile_object.name == 'alien':
                 Mob(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y,
@@ -214,11 +227,13 @@ class Game:
         pg.display.flip()
 
     def events(self):
+        global index
         # catch all events here
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
+
                 if event.key == pg.K_ESCAPE:
                     self.quit()
                 if event.key == pg.K_h:
