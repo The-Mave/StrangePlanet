@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-up" width="100" height="100" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="69">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-up" width="100" height="100" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="77">
  <tileset firstgid="1" source="tsttsttsttst.tsx"/>
  <layer id="1" name="chão" width="100" height="100">
   <data encoding="csv">
@@ -211,7 +211,7 @@
  </layer>
  <objectgroup id="3" name="Obstáculos">
   <object id="1" name="wall" x="0" y="0" width="128" height="6400"/>
-  <object id="3" name="player" x="1941" y="4368" width="20" height="21.5"/>
+  <object id="3" name="player" x="1941" y="4364.67" width="20" height="39.5"/>
   <object id="4" name="alien" x="2412.67" y="4507.92" width="20" height="21.5"/>
   <object id="5" name="alien" x="2616.67" y="4246.58" width="20" height="21.5"/>
   <object id="6" name="alien" x="2654" y="3453.25" width="20" height="21.5"/>
@@ -226,7 +226,7 @@
   <object id="15" name="alien" x="5574" y="4277.25" width="20" height="21.5"/>
   <object id="16" name="alien" x="5982" y="5013.25" width="20" height="21.5"/>
   <object id="17" name="alien" x="5494" y="5653.25" width="20" height="21.5"/>
-  <object id="18" name="alien" x="6182" y="5965.25" width="20" height="21.5"/>
+  <object id="18" name="shotgun" x="6296" y="6323.25" width="20" height="21.5"/>
   <object id="19" name="alien" x="6254" y="5413.25" width="20" height="21.5"/>
   <object id="20" name="alien" x="6190" y="3693.25" width="20" height="21.5"/>
   <object id="21" name="alien" x="5950" y="1933.25" width="20" height="21.5"/>
@@ -235,7 +235,7 @@
   <object id="24" name="alien" x="3974" y="277.25" width="20" height="21.5"/>
   <object id="25" name="alien" x="1038" y="261.25" width="20" height="21.5"/>
   <object id="26" name="alien" x="874.848" y="610.462" width="20" height="21.5"/>
-  <object id="27" name="alien" x="377.879" y="383.189" width="20" height="21.5"/>
+  <object id="27" name="shotgun" x="215.879" y="152.189" width="20" height="21.5"/>
   <object id="28" name="alien" x="441.515" y="874.098" width="20" height="21.5"/>
   <object id="29" name="alien" x="1138.48" y="568.038" width="20" height="21.5"/>
   <object id="30" name="alien" x="1417.27" y="610.462" width="20" height="21.5"/>
@@ -244,7 +244,7 @@
   <object id="33" name="alien" x="717.273" y="1192.28" width="20" height="21.5"/>
   <object id="34" name="alien" x="617.273" y="1749.86" width="20" height="21.5"/>
   <object id="35" name="alien" x="1517.27" y="1498.34" width="20" height="21.5"/>
-  <object id="36" name="alien" x="5911.21" y="131.674" width="20" height="21.5"/>
+  <object id="36" name="shotgun" x="6230.21" y="147.674" width="20" height="21.5"/>
   <object id="37" name="alien" x="5980.91" y="146.826" width="20" height="21.5"/>
   <object id="38" name="alien" x="6068.79" y="155.917" width="20" height="21.5"/>
   <object id="39" name="alien" x="6177.88" y="155.917" width="20" height="21.5"/>
@@ -276,5 +276,12 @@
   <object id="66" name="wall" x="5348" y="4203" width="80" height="150"/>
   <object id="67" name="wall" x="4632" y="4965" width="80" height="150"/>
   <object id="68" name="wall" x="6110" y="6119" width="80" height="150"/>
+  <object id="70" name="health" x="2096" y="4155.92" width="20" height="21.5"/>
+  <object id="71" name="health" x="2140" y="4197.25" width="20" height="21.5"/>
+  <object id="72" name="health" x="2144.67" y="4075.92" width="20" height="21.5"/>
+  <object id="73" name="alien" x="5912" y="138.25" width="20" height="21.5"/>
+  <object id="74" name="alien" x="375" y="380.25" width="20" height="21.5"/>
+  <object id="75" name="shotgun" x="222" y="6143.25" width="20" height="21.5"/>
+  <object id="76" name="alien" x="6182" y="5957.25" width="20" height="21.5"/>
  </objectgroup>
 </map>

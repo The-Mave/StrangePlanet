@@ -14,8 +14,6 @@ class Spritesheet:
             self.data = json.load(f)
         f.close()
 
-
-
     def get_sprite(self, x, y, w, h):
         sprite = pygame.Surface((w, h))
         sprite.set_colorkey((255,255,255))

@@ -154,7 +154,7 @@ class Mob(pg.sprite.Sprite):
         target_dist = self.target.pos - self.pos
         if target_dist.length_squared() < DETECT_RADIUS**2:
             if random() < 0.002:
-                choice(self.game.zombie_moan_sounds).play()
+                choice(self.game.alien_cry_sounds).play()
             self.rot = target_dist.angle_to(vec(1, 0))
             self.image = pg.transform.rotate(self.game.mob_img, 0)
             self.rect.center = self.pos
@@ -170,7 +170,7 @@ class Mob(pg.sprite.Sprite):
             collide_with_walls(self, self.game.walls, 'y')
             self.rect.center = self.hit_rect.center
         if self.health <= 0:
-            choice(self.game.zombie_hit_sounds).play()
+            choice(self.game.alien_hit_sounds).play()
             self.kill()
             self.game.map_img.blit(self.game.splat, self.pos - vec(32, 32))
 
@@ -197,10 +197,10 @@ class Bullet(pg.sprite.Sprite):
         self.hit_rect = self.rect
         self.pos = vec(pos)
         self.rect.center = pos
-        #spread = uniform(-GUN_SPREAD, GUN_SPREAD)
         self.vel = dir * WEAPONS[game.player.weapon]['bullet_speed'] * uniform(0.9, 1.1)
         self.spawn_time = pg.time.get_ticks()
         self.damage = damage
+        self.hit_rect = BULLET_HIT_RECT
 
     def update(self):
         self.pos += self.vel * self.game.dt
@@ -234,6 +234,7 @@ class MuzzleFlash(pg.sprite.Sprite):
         self.pos = pos
         self.rect.center = pos
         self.spawn_time = pg.time.get_ticks()
+        self.hit_rect = BULLET_HIT_RECT
 
     def update(self):
         if pg.time.get_ticks() - self.spawn_time > FLASH_DURATION:
@@ -253,6 +254,7 @@ class Item(pg.sprite.Sprite):
         self.tween = tween.easeInOutSine
         self.step = 0
         self.dir = 1
+        self.hit_rect = ITEM_HIT_RECT
 
     def update(self):
         # bobbing motion
