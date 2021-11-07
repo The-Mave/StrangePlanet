@@ -48,11 +48,10 @@ class Game:
         snd_folder = path.join(game_folder, 'snd')
         music_folder = path.join(game_folder, 'music')
         self.map_folder = path.join(game_folder, 'maps')
-        self.title_font = path.join(img_folder, 'ZOMBIE.TTF')
-        self.hud_font = path.join(img_folder, 'Impacted2.0.ttf')
+        self.title_font = path.join(img_folder, 'game_of_squids.TTF')
+        self.hud_font = path.join(img_folder, 'ethnocentric.ttf')
         self.dim_screen = pg.Surface(self.screen.get_size()).convert_alpha()
         self.dim_screen.fill((0, 0, 0, 180))
-        self.player_img = pg.image.load(path.join(img_folder, PLAYER_IMG)).convert_alpha()
         self.player_spritesheet = Spritesheet(PLAYER_IMG)
         self.player_s = [self.player_spritesheet.parse_sprite('player_s1.png'), self.player_spritesheet.parse_sprite('player_s2.png'),self.player_spritesheet.parse_sprite('player_s3.png')]
         self.player_sw = [self.player_spritesheet.parse_sprite('player_sw1.png'), self.player_spritesheet.parse_sprite('player_sw2.png'),self.player_spritesheet.parse_sprite('player_sw3.png')]
@@ -81,7 +80,7 @@ class Game:
         self.light_mask = pg.image.load(path.join(img_folder, LIGHT_MASK)).convert_alpha()
         self.light_mask = pg.transform.scale(self.light_mask, LIGHT_RADIUS)
         self.light_rect = self.light_mask.get_rect()
-        # som de carregamento
+        # som / músicas
         pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
         self.effects_sounds = {}
         for type in EFFECTS_SOUNDS:
@@ -93,17 +92,17 @@ class Game:
                 s = pg.mixer.Sound(path.join(snd_folder, snd))
                 s.set_volume(0.3)
                 self.weapon_sounds[weapon].append(s)
-        self.zombie_moan_sounds = []
-        for snd in ZOMBIE_MOAN_SOUNDS:
+        self.alien_cry_sounds = []
+        for snd in ALIEN_CRY_SOUNDS:
             s = pg.mixer.Sound(path.join(snd_folder, snd))
-            s.set_volume(0.2)
-            self.zombie_moan_sounds.append(s)
+            s.set_volume(1)
+            self.alien_cry_sounds.append(s)
         self.player_hit_sounds = []
         for snd in PLAYER_HIT_SOUNDS:
             self.player_hit_sounds.append(pg.mixer.Sound(path.join(snd_folder, snd)))
-        self.zombie_hit_sounds = []
-        for snd in ZOMBIE_HIT_SOUNDS:
-            self.zombie_hit_sounds.append(pg.mixer.Sound(path.join(snd_folder, snd)))
+        self.alien_hit_sounds = []
+        for snd in ALIEN_HIT_SOUNDS:
+            self.alien_hit_sounds.append(pg.mixer.Sound(path.join(snd_folder, snd)))
 
     def new(self):
         # inicializa variaiveis para o inicio do jogo
@@ -131,14 +130,13 @@ class Game:
         self.draw_debug = False
         self.paused = False
         self.night = False
-        self.effects_sounds['level_start'].play()
 
     def run(self):
         # loop game
         self.playing = True
         pg.mixer.music.play(loops=-1)
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000.0  # fix for Python 2.x
+            self.dt = self.clock.tick(FPS) / 1000.0  # para funcionar com Python 2.x
             self.events()
             if not self.paused:
                 self.update()
@@ -149,13 +147,13 @@ class Game:
         sys.exit()
 
     def update(self):
-        # update portion of the game loop
+        # Atualiza loop game
         self.all_sprites.update()
         self.camera.update(self.player)
         # game over?
         if len(self.mobs) == 0:
             self.playing = False
-        # player hits items
+        # jogador colide com itens
         hits = pg.sprite.spritecollide(self.player, self.items, False)
         for hit in hits:
             if hit.type == 'health' and self.player.health < PLAYER_HEALTH:
@@ -166,7 +164,7 @@ class Game:
                 hit.kill()
                 self.effects_sounds['gun_pickup'].play()
                 self.player.weapon = 'shotgun'
-        # mobs hit player
+        # inimigo colide com o jogador
         hits = pg.sprite.spritecollide(self.player, self.mobs, False, collide_hit_rect)
         for hit in hits:
             if random() < 0.7:
@@ -178,10 +176,9 @@ class Game:
         if hits:
             self.player.hit()
             self.player.pos += vec(MOB_KNOCKBACK, 0).rotate(-hits[0].rot)
-        # bullets hit mobs
+        # projétil colide com inimigo
         hits = pg.sprite.groupcollide(self.mobs, self.bullets, False, True)
         for mob in hits:
-            # hit.health -= WEAPONS[self.player.weapon]['damage'] * len(hits[hit])
             for bullet in hits[mob]:
                 mob.health -= bullet.damage
             mob.vel = vec(0, 0)
@@ -193,17 +190,15 @@ class Game:
             pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     def render_fog(self):
-        # draw the light mask (gradient) onto fog image
+        # Desenhar a máscara de luz (gradiente) na imagem esurecida
         self.fog.fill(NIGHT_COLOR)
         self.light_rect.center = self.camera.apply(self.player).center
         self.fog.blit(self.light_mask, self.light_rect)
         self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
 
     def draw(self):
-        pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
-        # self.screen.fill(BGCOLOR)
         self.screen.blit(self.map_img, self.camera.apply(self.map))
-        # self.draw_grid()
+        
         for sprite in self.all_sprites:
             if isinstance(sprite, Mob):
                 sprite.draw_health()
@@ -211,15 +206,16 @@ class Game:
             if self.draw_debug:
                 pg.draw.rect(self.screen, CYAN, self.camera.apply_rect(sprite.hit_rect), 1)
         if self.draw_debug:
+            self.draw_grid()
             for wall in self.walls:
                 pg.draw.rect(self.screen, CYAN, self.camera.apply_rect(wall.rect), 1)
 
-        # pg.draw.rect(self.screen, WHITE, self.player.hit_rect, 2)
+ 
         if self.night:
             self.render_fog()
-        # HUD functions
+        # HUD
         draw_player_health(self.screen, 10, 10, self.player.health / PLAYER_HEALTH)
-        self.draw_text('Zombies: {}'.format(len(self.mobs)), self.hud_font, 30, WHITE,
+        self.draw_text('Aliens: {}'.format(len(self.mobs)), self.hud_font, 30, WHITE,
                        WIDTH - 10, 10, align="topright")
         if self.paused:
             self.screen.blit(self.dim_screen, (0, 0))
@@ -228,7 +224,9 @@ class Game:
 
     def events(self):
         global index
-        # catch all events here
+        game_folder = path.dirname(__file__)
+        music_folder = path.join(game_folder, 'music')
+        # detectar eventos
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.quit()
@@ -242,20 +240,38 @@ class Game:
                     self.paused = not self.paused
                 if event.key == pg.K_n:
                     self.night = not self.night
+                    # Tocar música noturna
+                    if self.night:
+                        pg.mixer.music.load(path.join(music_folder, NIGHT))
+                        pg.mixer.music.play(loops=-1)
+                    else:
+                        pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
+                        pg.mixer.music.play(loops=-1)
+                if event.key == pg.K_g:
+                    if self.player.weapon == 'shotgun':
+                        self.player.weapon = 'pistol'
+                    else:
+                        self.player.weapon = 'shotgun'
 
     def show_start_screen(self):
         pass
 
     def show_go_screen(self):
         self.screen.fill(BLACK)
-        self.draw_text("GAME OVER", self.title_font, 100, RED,
+        game_folder = path.dirname(__file__)
+        music_folder = path.join(game_folder, 'music')
+        pg.mixer.music.load(path.join(music_folder, GAME_OVER))
+        pg.mixer.music.play(loops=1)
+        self.draw_text("GAME OVER", self.title_font, 150, RED,
                        WIDTH / 2, HEIGHT / 2, align="center")
-        self.draw_text("Press a key to start", self.title_font, 75, WHITE,
+        self.draw_text("Press any key to start", self.title_font, 40, WHITE,
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
 
     def wait_for_key(self):
+        game_folder = path.dirname(__file__)
+        music_folder = path.join(game_folder, 'music')
         pg.event.wait()
         waiting = True
         while waiting:
@@ -266,8 +282,9 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
+                    pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
 
-# create the game object
+# estanciar objeto do jogo
 g = Game()
 g.show_start_screen()
 while True:
