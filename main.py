@@ -3,6 +3,8 @@ import pygame as pg
 import sys
 from random import choice, random
 from os import path
+
+from pygame import surface
 from settings import *
 from sprites import *
 from tilemap import *
@@ -169,6 +171,15 @@ class Game:
         for hit in hits:
             if random() < 0.7:
                 choice(self.player_hit_sounds).play()
+
+
+            # EFEITO CAMERA VERMELHA
+            for i in range(0,2):
+                GB = min(255, max(0, round(255 * (1-0.8))))
+                self.screen.fill((255, GB, GB), special_flags = pg.BLEND_MULT)
+                pg.display.flip()
+                pg.time.wait(5)
+
             self.player.health -= MOB_DAMAGE
             hit.vel = vec(0, 0)
             if self.player.health <= 0:
@@ -195,6 +206,10 @@ class Game:
         self.light_rect.center = self.camera.apply(self.player).center
         self.fog.blit(self.light_mask, self.light_rect)
         self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
+
+    # def damageTaken(surf, scale):
+    #     GB = min(255, max(0, round(255 * (1-scale))))
+    #     surf.fill((255, GB, GB), special_flags = pg.BLEND_MULT)
 
     def draw(self):
         self.screen.blit(self.map_img, self.camera.apply(self.map))
