@@ -3,9 +3,6 @@ import pygame as pg
 import sys
 from random import choice, random
 from os import path
-
-from pygame import surface
-from pygame.time import Clock
 from settings import *
 from sprites import *
 from tilemap import *
