@@ -49,7 +49,7 @@ class Game:
         img_folder = path.join(game_folder, 'img')
         snd_folder = path.join(game_folder, 'snd')
         music_folder = path.join(game_folder, 'music')
-        self.map_folder = path.join(game_folder, 'maps')
+        self.map_folder = path.join(game_folder, 'mapas')
         self.title_font = path.join(img_folder, 'game_of_squids.TTF')
         self.hud_font = path.join(img_folder, 'ethnocentric.ttf')
         self.dim_screen = pg.Surface(self.screen.get_size()).convert_alpha()
@@ -107,7 +107,7 @@ class Game:
             self.alien_hit_sounds.append(pg.mixer.Sound(path.join(snd_folder, snd)))
 
     def new(self):
-        # inicializa variaiveis para o inicio do jogo
+        # inicializa5 variaiveis para o inicio do jogo
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.walls = pg.sprite.Group()
         self.mobs = pg.sprite.Group()

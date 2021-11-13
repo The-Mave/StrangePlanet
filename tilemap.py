@@ -20,6 +20,8 @@ class Map:
 
 class TiledMap:
     def __init__(self, filename):
+        # TENTEI FORÇAR O PATH AQUI MAS NAO DEU CERTO
+        # filename = 'C:\\Users\\matheus.avelino\\Desktop\\Faculdade\\Jogo\\StrangePlanet\\mapas\\mapa.tmx'
         tm = pytmx.load_pygame(filename, pixelalpha=True)
         self.width = tm.width * tm.tilewidth
         self.height = tm.height * tm.tileheight
