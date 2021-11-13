@@ -7,8 +7,6 @@ from itertools import chain
 import math
 vec = pg.math.Vector2
 
-index = 0
-
 def collide_with_walls(sprite, group, dir):
     if dir == 'x':
         hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
@@ -47,24 +45,24 @@ class Player(pg.sprite.Sprite):
         self.health = PLAYER_HEALTH
         self.weapon = 'pistol'
         self.damaged = False
+        self.index = 0
 
     def get_keys(self):
-        global index
         self.rot_speed = 0
         self.vel = vec(0, 0)
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.rot_speed = PLAYER_ROT_SPEED
-            index = (index + 0.1) % 3
+            self.index = (self.index + 0.05) % 3
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.rot_speed = -PLAYER_ROT_SPEED
-            index = (index + 0.1) % 3
+            self.index = (self.index + 0.05) % 3
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel = vec(PLAYER_SPEED, 0).rotate(-self.rot)
-            index = (index + 0.1) % 3
+            self.index = (self.index + 0.1) % 3
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel = vec(-PLAYER_SPEED / 2, 0).rotate(-self.rot)
-            index = (index + 0.1) % 3
+            self.index = (self.index + 0.05) % 3
         if keys[pg.K_SPACE]:
             self.shoot()
 
@@ -90,21 +88,21 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         if self.rot <= 22.5 or self.rot > 337.5:
-            self.image = self.game.player_e[math.trunc(index)]
+            self.image = self.game.player_e[math.trunc(self.index)]
         if self.rot <= 67.5 and self.rot > 22.5:
-            self.image = self.game.player_ne[math.trunc(index)]
+            self.image = self.game.player_ne[math.trunc(self.index)]
         if self.rot <= 112.5 and self.rot > 67.5:
-            self.image = self.game.player_n[math.trunc(index)]
+            self.image = self.game.player_n[math.trunc(self.index)]
         if self.rot <= 157.5 and self.rot > 112.5:
-            self.image = self.game.player_nw[math.trunc(index)]
+            self.image = self.game.player_nw[math.trunc(self.index)]
         if self.rot <= 202.5 and self.rot > 157.5:
-            self.image = self.game.player_w[math.trunc(index)]
+            self.image = self.game.player_w[math.trunc(self.index)]
         if self.rot <= 247.5 and self.rot > 202.5:
-            self.image = self.game.player_sw[math.trunc(index)]
+            self.image = self.game.player_sw[math.trunc(self.index)]
         if self.rot <= 292.5 and self.rot > 247.5:
-            self.image = self.game.player_s[math.trunc(index)]
+            self.image = self.game.player_s[math.trunc(self.index)]
         if self.rot <= 337.5 and self.rot > 292.5:
-            self.image = self.game.player_se[math.trunc(index)]
+            self.image = self.game.player_se[math.trunc(self.index)]
 
         self.get_keys()
         self.rot = (self.rot + self.rot_speed * self.game.dt) % 360
@@ -123,30 +121,32 @@ class Player(pg.sprite.Sprite):
         if self.health > PLAYER_HEALTH:
             self.health = PLAYER_HEALTH
 
-class Mob(pg.sprite.Sprite):
+class Alien(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self._layer = MOB_LAYER
-        self.groups = game.all_sprites, game.mobs
+        self._layer = ALIEN_LAYER
+        self.groups = game.all_sprites, game.aliens
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = game.mob_img.copy()
+        self.images = game.alien_imgs
+        self.image = game.alien_img
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.hit_rect = MOB_HIT_RECT.copy()
+        self.hit_rect = ALIEN_HIT_RECT.copy()
         self.hit_rect.center = self.rect.center
         self.pos = vec(x, y)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
         self.rect.center = self.pos
         self.rot = 0
-        self.health = MOB_HEALTH
-        self.speed = choice(MOB_SPEEDS)
+        self.health = ALIEN_HEALTH
+        self.speed = choice(ALIEN_SPEEDS)
         self.target = game.player
+        self.index = 0
 
-    def avoid_mobs(self):
-        for mob in self.game.mobs:
-            if mob != self:
-                dist = self.pos - mob.pos
+    def avoid_aliens(self):
+        for alien in self.game.aliens:
+            if alien != self:
+                dist = self.pos - alien.pos
                 if 0 < dist.length() < AVOID_RADIUS:
                     self.acc += dist.normalize()
 
@@ -155,11 +155,12 @@ class Mob(pg.sprite.Sprite):
         if target_dist.length_squared() < DETECT_RADIUS**2:
             if random() < 0.002:
                 choice(self.game.alien_cry_sounds).play()
+            self.index = (self.index + 0.1) % 2
             self.rot = target_dist.angle_to(vec(1, 0))
-            self.image = pg.transform.rotate(self.game.mob_img, 0)
+            self.image = pg.transform.rotate(self.images[math.trunc(self.index)], 0)
             self.rect.center = self.pos
             self.acc = vec(1, 0).rotate(-self.rot)
-            self.avoid_mobs()
+            self.avoid_aliens()
             self.acc.scale_to_length(self.speed)
             self.acc += self.vel * -1
             self.vel += self.acc * self.game.dt
@@ -181,10 +182,80 @@ class Mob(pg.sprite.Sprite):
             col = YELLOW
         else:
             col = RED
-        width = int(self.rect.width * self.health / MOB_HEALTH)
+        width = int(self.rect.width * self.health / ALIEN_HEALTH)
         self.health_bar = pg.Rect(0, 0, width, 7)
-        if self.health < MOB_HEALTH:
+        if self.health < ALIEN_HEALTH:
             pg.draw.rect(self.image, col, self.health_bar)
+
+## Não consegui fazer herança. Vou simplesmente copiar a classe
+
+class FireAlien(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self._layer = FIRE_ALIEN_LAYER
+        self.groups = game.all_sprites, game.aliens
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.images = game.fireAlien_imgs
+        self.image = game.fireAlien_img
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.hit_rect = FIRE_ALIEN_HIT_RECT.copy()
+        self.hit_rect.center = self.rect.center
+        self.pos = vec(x, y)
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+        self.rot = 0
+        self.health = FIRE_ALIEN_HEALTH
+        self.speed = choice(FIRE_ALIEN_SPEEDS)
+        self.target = game.player
+        self.index = 0
+
+    def avoid_aliens(self):
+        for alien in self.game.aliens:
+            if alien != self:
+                dist = self.pos - alien.pos
+                if 0 < dist.length() < AVOID_RADIUS:
+                    self.acc += dist.normalize()
+
+    def update(self):
+        target_dist = self.target.pos - self.pos
+        if target_dist.length_squared() < DETECT_RADIUS**2:
+            if random() < 0.002:
+                choice(self.game.alien_cry_sounds).play()
+            self.index = (self.index + 0.1) % 2
+            self.rot = target_dist.angle_to(vec(1, 0))
+            self.image = pg.transform.rotate(self.images[math.trunc(self.index)], 0)
+            self.rect.center = self.pos
+            self.acc = vec(1, 0).rotate(-self.rot)
+            self.avoid_aliens()
+            self.acc.scale_to_length(self.speed)
+            self.acc += self.vel * -1
+            self.vel += self.acc * self.game.dt
+            self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+            self.hit_rect.centerx = self.pos.x
+            collide_with_walls(self, self.game.walls, 'x')
+            self.hit_rect.centery = self.pos.y
+            collide_with_walls(self, self.game.walls, 'y')
+            self.rect.center = self.hit_rect.center
+        if self.health <= 0:
+            choice(self.game.alien_hit_sounds).play()
+            self.kill()
+            self.game.map_img.blit(self.game.fireSplat, self.pos - vec(32, 32))
+
+    def draw_health(self):
+        if self.health > 60:
+            col = GREEN
+        elif self.health > 30:
+            col = YELLOW
+        else:
+            col = RED
+        width = int(self.rect.width * self.health / FIRE_ALIEN_HEALTH)
+        self.health_bar = pg.Rect(0, 0, width, 7)
+        if self.health < FIRE_ALIEN_HEALTH:
+            pg.draw.rect(self.image, col, self.health_bar)
+
+
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, game, pos, dir, damage):

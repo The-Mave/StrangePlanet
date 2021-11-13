@@ -9,7 +9,7 @@ LIGHTGREY = (100, 100, 100)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
-BROWN = (106, 55, 5)
+BROWN = (35, 0, 0)
 CYAN = (0, 255, 255)
 
 # configurações do jogo
@@ -51,18 +51,27 @@ WEAPONS['shotgun'] = {'bullet_speed': 400,
                       'bullet_count': 12}
 
 # Configurações do alien
-MOB_IMG = 'alien.png'
-MOB_SPEEDS = [150, 100, 75, 125]
-MOB_HIT_RECT = pg.Rect(0, 0, 30, 30)
-MOB_HEALTH = 100
-MOB_DAMAGE = 10
-MOB_KNOCKBACK = 20
+ALIEN_IMG = ['alien1.png','alien2.png']
+ALIEN_SPEEDS = [100, 125, 150, 175]
+ALIEN_HIT_RECT = pg.Rect(0, 0, 30, 30)
+ALIEN_HEALTH = 80
+ALIEN_DAMAGE = 10
+ALIEN_KNOCKBACK = 20
 AVOID_RADIUS = 50
 DETECT_RADIUS = 400
+
+# Configurações do alien de fogo
+FIRE_ALIEN_IMG = ['fireAlien1.png','fireAlien2.png']
+FIRE_ALIEN_SPEEDS = [150, 175, 200, 225]
+FIRE_ALIEN_HIT_RECT = pg.Rect(0, 0, 30, 30)
+FIRE_ALIEN_HEALTH = 120
+FIRE_ALIEN_DAMAGE = 20
+FIRE_ALIEN_KNOCKBACK = 30
 
 # Efeitos
 MUZZLE_FLASHES = ['whitePuff1.png', 'whitePuff2.png', 'whitePuff3.png', 'whitePuff4.png']
 SPLAT = 'splat green.png'
+FIRE_SPLAT = 'splat red.png'
 FLASH_DURATION = 50
 DAMAGE_ALPHA = [i for i in range(0, 255, 55)]
 NIGHT_COLOR = (20, 20, 20)
@@ -73,7 +82,8 @@ LIGHT_MASK = "light.png"
 WALL_LAYER = 1
 PLAYER_LAYER = 2
 BULLET_LAYER = 3
-MOB_LAYER = 2
+ALIEN_LAYER = 2
+FIRE_ALIEN_LAYER = 2
 EFFECTS_LAYER = 4
 ITEMS_LAYER = 1
 
@@ -95,6 +105,7 @@ EFFECTS_SOUNDS = {'health_up': 'health_pack.wav',
                   'gun_pickup': 'gun_pickup.wav'}
 GAME_OVER = 'game_over.wav'
 NIGHT = 'kraids-hideout.wav'
+INTRO = 'intro.wav'
 
 #Hit rects
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
