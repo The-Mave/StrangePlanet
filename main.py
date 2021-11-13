@@ -3,6 +3,8 @@ import pygame as pg
 import sys
 from random import choice, random
 from os import path
+
+from pygame import surface
 from settings import *
 from sprites import *
 from tilemap import *
@@ -189,6 +191,7 @@ class Game:
                 self.player.health -= ALIEN_DAMAGE
             else:
                 self.player.health -= FIRE_ALIEN_DAMAGE
+
             hit.vel = vec(0, 0)
             if self.player.health <= 0:
                 self.playing = False
