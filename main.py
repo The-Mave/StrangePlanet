@@ -1,10 +1,7 @@
-
 import pygame as pg
 import sys
 from random import choice, random
 from os import path
-
-from pygame import surface
 from settings import *
 from sprites import *
 from tilemap import *
@@ -115,6 +112,7 @@ class Game:
         # inicializa variaiveis para o inicio do jogo
         self.all_sprites = pg.sprite.LayeredUpdates()
         self.walls = pg.sprite.Group()
+        self.lavas = pg.sprite.Group()
         self.aliens = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.items = pg.sprite.Group()
@@ -132,6 +130,9 @@ class Game:
                 FireAlien(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y,
+                         tile_object.width, tile_object.height)
+            if tile_object.name == 'lava':
+                Lava(self, tile_object.x, tile_object.y,
                          tile_object.width, tile_object.height)
             if tile_object.name in ['health', 'shotgun']:
                 Item(self, obj_center, tile_object.name)
@@ -187,7 +188,7 @@ class Game:
                 pg.display.flip()
                 pg.time.wait(5)
 
-            if (self.player.pos[1] > 6400/3): #ALERTA DE GAMBIARRA!!! Toma mais dano se estiver na parte de cima do mapa
+            if (type(hit)==Alien):
                 self.player.health -= ALIEN_DAMAGE
             else:
                 self.player.health -= FIRE_ALIEN_DAMAGE
@@ -266,6 +267,9 @@ class Game:
                     self.draw_debug = not self.draw_debug
                 if event.key == pg.K_p:
                     self.paused = not self.paused
+                if event.key == pg.K_k:
+                    for alien in g.aliens:
+                        alien.kill()
                 if event.key == pg.K_n:
                     self.night = not self.night
                     # Tocar música noturna
@@ -281,6 +285,19 @@ class Game:
                     else:
                         self.player.weapon = 'shotgun'
 
+    def show_win_screen(self):
+        self.screen.fill(BLACK)
+        game_folder = path.dirname(__file__)
+        music_folder = path.join(game_folder, 'music')
+        pg.mixer.music.load(path.join(music_folder, WIN))
+        pg.mixer.music.play(loops=1)
+        self.draw_text("YOU SAVED THE GALAXY", self.title_font, 70, BLUE,
+                       WIDTH / 2, HEIGHT / 2, align="center")
+        self.draw_text("Press any key to continue", self.title_font, 40, WHITE,
+                       WIDTH / 2, HEIGHT * 3 / 4, align="center")
+        pg.display.flip()
+        self.wait_for_key()
+
     def show_go_screen(self):
         self.screen.fill(BLACK)
         game_folder = path.dirname(__file__)
@@ -289,7 +306,7 @@ class Game:
         pg.mixer.music.play(loops=1)
         self.draw_text("GAME OVER", self.title_font, 150, RED,
                        WIDTH / 2, HEIGHT / 2, align="center")
-        self.draw_text("Press any key to start", self.title_font, 40, WHITE,
+        self.draw_text("Press any key to continue", self.title_font, 40, WHITE,
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
@@ -328,4 +345,7 @@ g.show_start_screen()
 while True:
     g.new()
     g.run()
-    g.show_go_screen()
+    if len(g.aliens) == 0:
+        g.show_win_screen()
+    else:
+        g.show_go_screen()
