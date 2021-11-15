@@ -71,7 +71,7 @@ class Player(pg.sprite.Sprite):
         if now - self.last_shot > WEAPONS[self.weapon]['rate']:
             self.last_shot = now
             dir = vec(1, 0).rotate(-self.rot)
-            pos = self.pos + BARREL_OFFSET.rotate(-self.rot)
+            pos = self.pos + BARREL_OFFSET.rotate(-self.rot) + vec(0, -48)
             self.vel = vec(-WEAPONS[self.weapon]['kickback'], 0).rotate(-self.rot)
             for i in range(WEAPONS[self.weapon]['bullet_count']):
                 spread = uniform(-WEAPONS[self.weapon]['spread'], WEAPONS[self.weapon]['spread'])
@@ -114,12 +114,20 @@ class Player(pg.sprite.Sprite):
         collide_with_walls(self, self.game.walls, 'x')
         self.hit_rect.centery = self.pos.y
         collide_with_walls(self, self.game.walls, 'y')
-        self.rect.center = self.hit_rect.center
+        self.rect.center = (self.hit_rect.centerx, self.hit_rect.centery-48)
+        self.collide_with_lava(self.game.lavas, self.game)
 
     def add_health(self, amount):
         self.health += amount
         if self.health > PLAYER_HEALTH:
             self.health = PLAYER_HEALTH
+    
+    def collide_with_lava(self, group, game):
+        if pg.sprite.spritecollide(self, group, False, collide_hit_rect):
+            self.health -= LAVA_DAMAGE
+
+            if (self.health <= 0):
+               game.playing = False
 
 class Alien(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -284,6 +292,18 @@ class Bullet(pg.sprite.Sprite):
 class Obstacle(pg.sprite.Sprite):
     def __init__(self, game, x, y, w, h):
         self.groups = game.walls
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.rect = pg.Rect(x, y, w, h)
+        self.hit_rect = self.rect
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y
+
+class Lava(pg.sprite.Sprite):
+    def __init__(self, game, x, y, w, h):
+        self.groups = game.lavas
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.rect = pg.Rect(x, y, w, h)

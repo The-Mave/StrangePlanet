@@ -6,8 +6,9 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARKGREY = (40, 40, 40)
 LIGHTGREY = (100, 100, 100)
-GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 BROWN = (35, 0, 0)
 CYAN = (0, 255, 255)
@@ -27,7 +28,7 @@ PLAYER_HEALTH = 100
 PLAYER_SPEED = 280
 PLAYER_ROT_SPEED = 200
 PLAYER_IMG = 'player_sheet.png'
-PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 70)
+PLAYER_HIT_RECT = pg.Rect(0, 0, 35, 35)
 BARREL_OFFSET = vec(30, 10)
 
 # Weapon settings
@@ -68,6 +69,9 @@ FIRE_ALIEN_HEALTH = 120
 FIRE_ALIEN_DAMAGE = 20
 FIRE_ALIEN_KNOCKBACK = 30
 
+# Configurações da lava
+LAVA_DAMAGE = 0.1
+
 # Efeitos
 MUZZLE_FLASHES = ['whitePuff1.png', 'whitePuff2.png', 'whitePuff3.png', 'whitePuff4.png']
 SPLAT = 'splat green.png'
@@ -80,11 +84,11 @@ LIGHT_MASK = "light.png"
 
 # Layers
 WALL_LAYER = 1
-PLAYER_LAYER = 2
-BULLET_LAYER = 3
+PLAYER_LAYER = 3
+BULLET_LAYER = 4
 ALIEN_LAYER = 2
 FIRE_ALIEN_LAYER = 2
-EFFECTS_LAYER = 4
+EFFECTS_LAYER = 5
 ITEMS_LAYER = 1
 
 # Itens
@@ -104,6 +108,7 @@ WEAPON_SOUNDS = {'pistol': ['pistol.wav'],
 EFFECTS_SOUNDS = {'health_up': 'health_pack.wav',
                   'gun_pickup': 'gun_pickup.wav'}
 GAME_OVER = 'game_over.wav'
+WIN = 'victory-fanfare.wav'
 NIGHT = 'kraids-hideout.wav'
 INTRO = 'intro.wav'
 
