@@ -184,9 +184,9 @@ class Alien(pg.sprite.Sprite):
             self.game.map_img.blit(self.game.splat, self.pos - vec(32, 32))
 
     def draw_health(self):
-        if self.health > 60:
+        if (self.health > 0.6 * ALIEN_HEALTH):
             col = GREEN
-        elif self.health > 30:
+        elif (self.health > 0.3 * ALIEN_HEALTH):
             col = YELLOW
         else:
             col = RED
@@ -252,15 +252,82 @@ class FireAlien(pg.sprite.Sprite):
             self.game.map_img.blit(self.game.fireSplat, self.pos - vec(32, 32))
 
     def draw_health(self):
-        if self.health > 60:
+        if (self.health > 0.6 * FIRE_ALIEN_HEALTH):
             col = GREEN
-        elif self.health > 30:
+        elif (self.health > 0.3 * FIRE_ALIEN_HEALTH):
             col = YELLOW
         else:
             col = RED
         width = int(self.rect.width * self.health / FIRE_ALIEN_HEALTH)
         self.health_bar = pg.Rect(0, 0, width, 7)
         if self.health < FIRE_ALIEN_HEALTH:
+            pg.draw.rect(self.image, col, self.health_bar)
+
+
+class Boss(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self._layer = BOSS_LAYER
+        self.groups = game.all_sprites, game.aliens
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.images = game.boss_imgs
+        self.image = game.boss_img
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.hit_rect = BOSS_HIT_RECT.copy()
+        self.hit_rect.center = self.rect.center
+        self.pos = vec(x, y)
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+        self.rot = 0
+        self.health = BOSS_HEALTH
+        self.speed = choice(BOSS_SPEEDS)
+        self.target = game.player
+        self.index = 0
+
+    def avoid_aliens(self):
+        for alien in self.game.aliens:
+            if alien != self:
+                dist = self.pos - alien.pos
+                if 0 < dist.length() < AVOID_RADIUS:
+                    self.acc += dist.normalize()
+
+    def update(self):
+        target_dist = self.target.pos - self.pos
+        if target_dist.length_squared() < BOSS_DETECT_RADIUS**2:
+            if random() < 0.002:
+                choice(self.game.alien_cry_sounds).play()
+            self.index = (self.index + 0.1) % 2
+            self.rot = target_dist.angle_to(vec(1, 0))
+            self.image = pg.transform.rotate(self.images[math.trunc(self.index)], 0)
+            self.rect.center = self.pos
+            self.acc = vec(1, 0).rotate(-self.rot)
+            self.avoid_aliens()
+            self.acc.scale_to_length(self.speed)
+            self.acc += self.vel * -1
+            self.vel += self.acc * self.game.dt
+            self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+            self.hit_rect.centerx = self.pos.x
+            collide_with_walls(self, self.game.walls, 'x')
+            self.hit_rect.centery = self.pos.y
+            collide_with_walls(self, self.game.walls, 'y')
+            self.rect.center = self.hit_rect.center
+        if self.health <= 0:
+            choice(self.game.alien_hit_sounds).play()
+            self.kill()
+            self.game.map_img.blit(self.game.bossSplat, self.pos - vec(32, 32))
+
+    def draw_health(self):
+        if (self.health > 0.6 * BOSS_HEALTH):
+            col = GREEN
+        elif (self.health > 0.3 * BOSS_HEALTH):
+            col = YELLOW
+        else:
+            col = RED
+        width = int(self.rect.width * self.health / BOSS_HEALTH)
+        self.health_bar = pg.Rect(0, 0, width, 7)
+        if self.health < BOSS_HEALTH:
             pg.draw.rect(self.image, col, self.health_bar)
 
 

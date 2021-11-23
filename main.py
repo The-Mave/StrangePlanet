@@ -68,10 +68,14 @@ class Game:
         self.alien_img = self.alien_imgs[index]
         self.fireAlien_imgs = [pg.image.load(path.join(img_folder, FIRE_ALIEN_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, FIRE_ALIEN_IMG[1])).convert_alpha()]
         self.fireAlien_img = self.fireAlien_imgs[index]
+        self.boss_imgs = [pg.image.load(path.join(img_folder, BOSS_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, BOSS_IMG[1])).convert_alpha()]
+        self.boss_img = self.boss_imgs[index]
         self.splat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.splat = pg.transform.scale(self.splat, (64, 64))
         self.fireSplat = pg.image.load(path.join(img_folder, FIRE_SPLAT)).convert_alpha()
         self.fireSplat = pg.transform.scale(self.fireSplat, (64, 64))
+        self.bossSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
+        self.bossSplat = pg.transform.scale(self.splat, (128, 128))
         self.gun_flashes = []
         for img in MUZZLE_FLASHES:
             self.gun_flashes.append(pg.image.load(path.join(img_folder, img)).convert_alpha())
@@ -128,6 +132,8 @@ class Game:
                 Alien(self, obj_center.x, obj_center.y)
             if tile_object.name == 'fireAlien':
                 FireAlien(self, obj_center.x, obj_center.y)
+            if tile_object.name == 'boss':
+                Boss(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y,
                          tile_object.width, tile_object.height)
@@ -170,6 +176,10 @@ class Game:
                 hit.kill()
                 self.effects_sounds['health_up'].play()
                 self.player.add_health(HEALTH_PACK_AMOUNT)
+            if hit.type == 'leg' and self.player.health < PLAYER_HEALTH:
+                hit.kill()
+                self.effects_sounds['health_up'].play()
+                self.player.add_health(LEG_AMOUNT)
             if hit.type == 'shotgun':
                 hit.kill()
                 self.effects_sounds['gun_pickup'].play()
@@ -190,8 +200,10 @@ class Game:
 
             if (type(hit)==Alien):
                 self.player.health -= ALIEN_DAMAGE
-            else:
+            elif (type(hit)==FireAlien):
                 self.player.health -= FIRE_ALIEN_DAMAGE
+            else:
+                self.player.health -= BOSS_DAMAGE
 
             hit.vel = vec(0, 0)
             if self.player.health <= 0:
@@ -204,6 +216,9 @@ class Game:
         for alien in hits:
             for bullet in hits[alien]:
                 alien.health -= bullet.damage
+                if (type(alien)==Boss and alien.health <= 0):
+                    Item(self, alien.pos + vec(32, 32), 'leg')
+
             alien.vel = vec(0, 0)
 
     def draw_grid(self):
@@ -230,6 +245,8 @@ class Game:
             if isinstance(sprite, Alien):
                 sprite.draw_health()
             if isinstance(sprite, FireAlien):
+                sprite.draw_health()
+            if isinstance(sprite, Boss):
                 sprite.draw_health()
             self.screen.blit(sprite.image, self.camera.apply(sprite))
             if self.draw_debug:
@@ -291,9 +308,9 @@ class Game:
         music_folder = path.join(game_folder, 'music')
         pg.mixer.music.load(path.join(music_folder, WIN))
         pg.mixer.music.play(loops=1)
-        self.draw_text("YOU SAVED THE GALAXY", self.title_font, 70, BLUE,
+        self.draw_text("YOU SAVED THE GALAXY", self.title_font, 100, BLUE,
                        WIDTH / 2, HEIGHT / 2, align="center")
-        self.draw_text("Press any key to continue", self.title_font, 40, WHITE,
+        self.draw_text("Press any key to continue", self.title_font, 50, WHITE,
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
@@ -304,9 +321,9 @@ class Game:
         music_folder = path.join(game_folder, 'music')
         pg.mixer.music.load(path.join(music_folder, GAME_OVER))
         pg.mixer.music.play(loops=1)
-        self.draw_text("GAME OVER", self.title_font, 150, RED,
+        self.draw_text("GAME OVER", self.title_font, 180, RED,
                        WIDTH / 2, HEIGHT / 2, align="center")
-        self.draw_text("Press any key to continue", self.title_font, 40, WHITE,
+        self.draw_text("Press any key to continue", self.title_font, 50, WHITE,
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
@@ -317,9 +334,9 @@ class Game:
         music_folder = path.join(game_folder, 'music')
         pg.mixer.music.load(path.join(music_folder, INTRO))
         pg.mixer.music.play(loops=-1)
-        self.draw_text("STRANGE PLANET", self.title_font, 100, GREEN,
+        self.draw_text("STRANGE PLANET", self.title_font, 130, GREEN,
                        WIDTH / 2, HEIGHT / 2, align="center")
-        self.draw_text("Press any key to start", self.title_font, 40, WHITE,
+        self.draw_text("Press any key to start", self.title_font, 50, WHITE,
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
