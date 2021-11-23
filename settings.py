@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 vec = pg.math.Vector2
 
 # define algumas cores (R, G, B)
@@ -14,8 +15,11 @@ BROWN = (35, 0, 0)
 CYAN = (0, 255, 255)
 
 # configurações do jogo
-WIDTH = 1024   # 16 * 64 or 32 * 32 or 64 * 16
-HEIGHT = 768  # 16 * 48 or 32 * 24 or 64 * 12
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+pg.init()
+
+WIDTH = pg.display.Info().current_w
+HEIGHT = pg.display.Info().current_h
 FPS = 60
 TITLE = "Strange Planet"
 
@@ -60,6 +64,7 @@ ALIEN_DAMAGE = 10
 ALIEN_KNOCKBACK = 20
 AVOID_RADIUS = 50
 DETECT_RADIUS = 400
+BOSS_DETECT_RADIUS = 800
 
 # Configurações do alien de fogo
 FIRE_ALIEN_IMG = ['fireAlien1.png','fireAlien2.png']
@@ -68,6 +73,14 @@ FIRE_ALIEN_HIT_RECT = pg.Rect(0, 0, 30, 30)
 FIRE_ALIEN_HEALTH = 120
 FIRE_ALIEN_DAMAGE = 20
 FIRE_ALIEN_KNOCKBACK = 30
+
+# Configurações do boss
+BOSS_IMG = ['boss1.png','boss2.png']
+BOSS_SPEEDS = [50, 75, 90, 100]
+BOSS_HIT_RECT = pg.Rect(0, 0, 30, 30)
+BOSS_HEALTH = 360
+BOSS_DAMAGE = 35
+BOSS_KNOCKBACK = 30
 
 # Configurações da lava
 LAVA_DAMAGE = 0.1
@@ -88,13 +101,16 @@ PLAYER_LAYER = 3
 BULLET_LAYER = 4
 ALIEN_LAYER = 2
 FIRE_ALIEN_LAYER = 2
+BOSS_LAYER = 2
 EFFECTS_LAYER = 5
 ITEMS_LAYER = 1
 
 # Itens
-ITEM_IMAGES = {'health': 'health_pack.png',
-               'shotgun': 'obj_shotgun.png'}
-HEALTH_PACK_AMOUNT = 20
+ITEM_IMAGES = {'health': 'health.png',
+               'shotgun': 'obj_shotgun.png',
+               'leg': 'leg.png'}
+HEALTH_PACK_AMOUNT = 25
+LEG_AMOUNT = 50
 BOB_RANGE = 10
 BOB_SPEED = 0.3
 
