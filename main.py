@@ -120,7 +120,7 @@ class Game:
         self.aliens = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
         self.items = pg.sprite.Group()
-        self.map = TiledMap(path.join(self.map_folder, 'mapa.tmx'))
+        self.map = TiledMap(path.join(self.map_folder, 'map.tmx'))
         self.map_img = self.map.make_map()
         self.map.rect = self.map_img.get_rect()
         for tile_object in self.map.tmxdata.objects:
@@ -146,6 +146,7 @@ class Game:
         self.draw_debug = False
         self.paused = False
         self.night = False
+        self.godMode = False
 
     def run(self):
         # loop game
@@ -185,32 +186,33 @@ class Game:
                 self.effects_sounds['gun_pickup'].play()
                 self.player.weapon = 'shotgun'
         # inimigo colide com o jogador
-        hits = pg.sprite.spritecollide(self.player, self.aliens, False, collide_hit_rect)
-        for hit in hits:
-            if random() < 0.7:
-                choice(self.player_hit_sounds).play()
+        if not(self.godMode):
+            hits = pg.sprite.spritecollide(self.player, self.aliens, False, collide_hit_rect)
+            for hit in hits:
+                if random() < 0.7:
+                    choice(self.player_hit_sounds).play()
 
 
-            # EFEITO CAMERA VERMELHA
-            for i in range(0,2):
-                GB = min(255, max(0, round(255 * (1-0.8))))
-                self.screen.fill((255, GB, GB), special_flags = pg.BLEND_MULT)
-                pg.display.flip()
-                pg.time.wait(5)
+                # EFEITO CAMERA VERMELHA
+                for i in range(0,2):
+                    GB = min(255, max(0, round(255 * (1-0.8))))
+                    self.screen.fill((255, GB, GB), special_flags = pg.BLEND_MULT)
+                    pg.display.flip()
+                    pg.time.wait(5)
 
-            if (type(hit)==Alien):
-                self.player.health -= ALIEN_DAMAGE
-            elif (type(hit)==FireAlien):
-                self.player.health -= FIRE_ALIEN_DAMAGE
-            else:
-                self.player.health -= BOSS_DAMAGE
+                if (type(hit)==Alien):
+                    self.player.health -= ALIEN_DAMAGE
+                elif (type(hit)==FireAlien):
+                    self.player.health -= FIRE_ALIEN_DAMAGE
+                else:
+                    self.player.health -= BOSS_DAMAGE
 
-            hit.vel = vec(0, 0)
-            if self.player.health <= 0:
-                self.playing = False
-        if hits:
-            self.player.hit()
-            self.player.pos += vec(ALIEN_KNOCKBACK, 0).rotate(-hits[0].rot)
+                hit.vel = vec(0, 0)
+                if self.player.health <= 0:
+                    self.playing = False
+            if hits:
+                self.player.hit()
+                self.player.pos += vec(ALIEN_KNOCKBACK, 0).rotate(-hits[0].rot)
         # projétil colide com inimigo
         hits = pg.sprite.groupcollide(self.aliens, self.bullets, False, True)
         for alien in hits:
@@ -255,6 +257,8 @@ class Game:
             self.draw_grid()
             for wall in self.walls:
                 pg.draw.rect(self.screen, CYAN, self.camera.apply_rect(wall.rect), 1)
+            for lava in self.lavas:
+                pg.draw.rect(self.screen, RED, self.camera.apply_rect(lava.rect), 1)
 
  
         if self.night:
@@ -282,6 +286,8 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
+                if event.key == pg.K_q:
+                    self.godMode = not self.godMode
                 if event.key == pg.K_p:
                     self.paused = not self.paused
                 if event.key == pg.K_k:
