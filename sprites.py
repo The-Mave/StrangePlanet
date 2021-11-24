@@ -109,11 +109,16 @@ class Player(pg.sprite.Sprite):
         self.image = pg.transform.rotate(self.image, 0)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
-        self.pos += self.vel * self.game.dt
+        if self.game.godMode:
+            self.pos += self.vel * 3 * self.game.dt
+        else:
+            self.pos += self.vel * self.game.dt
         self.hit_rect.centerx = self.pos.x
-        collide_with_walls(self, self.game.walls, 'x')
+        if not(self.game.godMode):
+            collide_with_walls(self, self.game.walls, 'x')
         self.hit_rect.centery = self.pos.y
-        collide_with_walls(self, self.game.walls, 'y')
+        if not(self.game.godMode):
+            collide_with_walls(self, self.game.walls, 'y')
         self.rect.center = (self.hit_rect.centerx, self.hit_rect.centery-48)
         self.collide_with_lava(self.game.lavas, self.game)
 

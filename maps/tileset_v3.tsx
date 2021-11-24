@@ -114,5 +114,21 @@
    <wangtile tileid="256" wangid="0,1,0,0,0,0,0,1"/>
    <wangtile tileid="257" wangid="0,0,0,0,0,0,0,1"/>
   </wangset>
+  <wangset name="Unnamed Set" type="corner" tile="-1">
+   <wangcolor name="" color="#ff0000" tile="-1" probability="1"/>
+   <wangtile tileid="30" wangid="0,1,0,0,0,1,0,1"/>
+   <wangtile tileid="31" wangid="0,1,0,1,0,0,0,1"/>
+   <wangtile tileid="85" wangid="0,0,0,1,0,1,0,1"/>
+   <wangtile tileid="86" wangid="0,1,0,1,0,1,0,0"/>
+   <wangtile tileid="139" wangid="0,0,0,1,0,0,0,0"/>
+   <wangtile tileid="140" wangid="0,0,0,1,0,1,0,0"/>
+   <wangtile tileid="141" wangid="0,0,0,0,0,1,0,0"/>
+   <wangtile tileid="194" wangid="0,1,0,1,0,0,0,0"/>
+   <wangtile tileid="195" wangid="0,1,0,1,0,1,0,1"/>
+   <wangtile tileid="196" wangid="0,0,0,0,0,1,0,1"/>
+   <wangtile tileid="249" wangid="0,1,0,0,0,0,0,0"/>
+   <wangtile tileid="250" wangid="0,1,0,0,0,0,0,1"/>
+   <wangtile tileid="251" wangid="0,0,0,0,0,0,0,1"/>
+  </wangset>
  </wangsets>
 </tileset>
