@@ -145,3 +145,40 @@ INTRO = 'intro.wav'
 #Hit rects
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
 BULLET_HIT_RECT = pg.Rect(0, 0, 15, 15)
+
+#Intro animation
+ANIMATION =[
+'5EDx-0.png',
+'5EDx-1.png',
+'5EDx-2.png',
+'5EDx-3.png',
+'5EDx-4.png',
+'5EDx-5.png',
+'5EDx-6.png',
+'5EDx-7.png',
+'5EDx-8.png',
+'5EDx-9.png',
+'5EDx-10.png',
+'5EDx-11.png',
+'5EDx-12.png',
+'5EDx-13.png',
+'5EDx-14.png',
+'5EDx-15.png',
+'5EDx-16.png',
+'5EDx-17.png',
+'5EDx-18.png',
+'5EDx-19.png',
+'5EDx-20.png',
+'5EDx-21.png',
+'5EDx-22.png',
+'5EDx-23.png',
+'5EDx-24.png',
+'5EDx-25.png',
+'5EDx-26.png',
+'5EDx-27.png',
+'5EDx-28.png',
+'5EDx-29.png',
+'5EDx-30.png',
+'5EDx-31.png',
+'5EDx-32.png',
+]

@@ -44,6 +44,7 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         img_folder = path.join(game_folder, 'img')
+        movie_folder = path.join(game_folder, 'movie')
         snd_folder = path.join(game_folder, 'snd')
         music_folder = path.join(game_folder, 'music')
         self.map_folder = path.join(game_folder, 'maps')
@@ -80,6 +81,10 @@ class Game:
         self.bossSplat = pg.transform.scale(self.splat, (128, 128))
         self.aranhaSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.aranhaSplat = pg.transform.scale(self.splat, (128, 128))
+        #ANIMACAO
+        self.animation_imgs = [pg.image.load(path.join(movie_folder, ANIMATION [0])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[1])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[2])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[3])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[4])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[5])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[6])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[7])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[8])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[9])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[10])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[11])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[12])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[13])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[14])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[15])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[16])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[17])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[18])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[19])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[20])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[21])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[22])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[23])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[24])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[25])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[26])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[27])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[28])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[29])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[30])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[31])).convert_alpha(),pg.image.load(path.join(movie_folder, ANIMATION[32])).convert_alpha()]
+        self.aniamtion_img = self.animation_imgs[0]
+        
         self.gun_flashes = []
         for img in MUZZLE_FLASHES:
             self.gun_flashes.append(pg.image.load(path.join(img_folder, img)).convert_alpha())
@@ -368,13 +373,21 @@ class Game:
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
-    
+    kp  = False
     def show_start_screen(self):
         self.screen.fill(BROWN)
         game_folder = path.dirname(__file__)
         music_folder = path.join(game_folder, 'music')
         pg.mixer.music.load(path.join(music_folder, INTRO))
         pg.mixer.music.play(loops=-1)
+
+        for animation_img in self.animation_imgs:
+            pg.self.screen.blit(animation_img, (0,0))
+    #pause aqui
+
+        
+
+
         self.draw_text("STRANGE PLANET", self.title_font, 130, GREEN,
                        WIDTH / 2, HEIGHT / 2, align="center")
         self.draw_text("Press any key to start", self.title_font, 50, WHITE,
