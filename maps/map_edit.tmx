@@ -1798,7 +1798,7 @@
   <object id="2964" name="boss" x="2848" y="3904"/>
   <object id="2965" name="boss" x="6336" y="8800"/>
  </objectgroup>
- <objectgroup id="42" name="Wall_Plain-Trees" visible="0">
+ <objectgroup id="42" name="Wall_Plain-Trees">
   <object id="826" name="wall" x="207" y="16912" width="110" height="160"/>
   <object id="829" name="wall" x="204.5" y="16394" width="110" height="160"/>
   <object id="830" name="wall" x="330.5" y="16592" width="110" height="160"/>
@@ -1897,7 +1897,7 @@
   <object id="923" name="wall" x="5901.02" y="15244.5" width="110" height="160"/>
   <object id="924" name="wall" x="6228.29" y="15117.2" width="110" height="160"/>
   <object id="925" name="wall" x="5973.74" y="14980.8" width="110" height="160"/>
-  <object id="926" name="wall" x="5591.92" y="14993" width="110" height="160"/>
+  <object id="926" name="wall" x="5597.25" y="15002.3" width="103.333" height="150.667"/>
   <object id="927" name="wall" x="5201.02" y="14920.2" width="110" height="160"/>
   <object id="928" name="wall" x="3658.59" y="14986.9" width="110" height="160"/>
   <object id="929" name="wall" x="3916.17" y="14853.6" width="110" height="160"/>
@@ -1913,8 +1913,8 @@
   <object id="939" name="wall" x="5001.02" y="14593" width="110" height="160"/>
   <object id="940" name="wall" x="5258.59" y="14547.5" width="110" height="160"/>
   <object id="941" name="wall" x="5194.95" y="14726.3" width="110" height="160"/>
-  <object id="942" name="wall" x="5455.56" y="14799" width="110" height="160"/>
-  <object id="943" name="wall" x="5710.11" y="14805.1" width="110" height="160"/>
+  <object id="942" name="wall" x="5454.23" y="14800.3" width="96.6667" height="150.667"/>
+  <object id="943" name="wall" x="5732.78" y="14791.8" width="95.3333" height="148"/>
   <object id="944" name="wall" x="3973.74" y="14220.2" width="110" height="160"/>
   <object id="945" name="wall" x="4546.47" y="14217.2" width="110" height="160"/>
   <object id="946" name="wall" x="4282.83" y="13896" width="110" height="160"/>

@@ -120,7 +120,8 @@ class Player(pg.sprite.Sprite):
         if not(self.game.godMode):
             collide_with_walls(self, self.game.walls, 'y')
         self.rect.center = (self.hit_rect.centerx, self.hit_rect.centery-48)
-        self.collide_with_lava(self.game.lavas, self.game)
+        if not(self.game.godMode):
+            self.collide_with_lava(self.game.lavas, self.game)
 
     def add_health(self, amount):
         self.health += amount
@@ -335,25 +336,25 @@ class Boss(pg.sprite.Sprite):
             pg.draw.rect(self.image, col, self.health_bar)
 
 
-class Aranha(pg.sprite.Sprite):
+class Spider(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self._layer = ARANHA_LAYER
+        self._layer = SPIDER_LAYER
         self.groups = game.all_sprites, game.aliens
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.images = game.aranha_imgs
-        self.image = game.aranha_img
+        self.images = game.spider_imgs
+        self.image = game.spider_img
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.hit_rect = ARANHA_HIT_RECT.copy()
+        self.hit_rect = SPIDER_HIT_RECT.copy()
         self.hit_rect.center = self.rect.center
         self.pos = vec(x, y)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
         self.rect.center = self.pos
         self.rot = 0
-        self.health = ARANHA_HEALTH
-        self.speed = choice(ARANHA_SPEEDS)
+        self.health = SPIDER_HEALTH
+        self.speed = choice(SPIDER_SPEEDS)
         self.target = game.player
         self.index = 0
 
@@ -366,7 +367,7 @@ class Aranha(pg.sprite.Sprite):
 
     def update(self):
         target_dist = self.target.pos - self.pos
-        if target_dist.length_squared() < ARANHA_DETECT_RADIUS**2:
+        if target_dist.length_squared() < SPIDER_DETECT_RADIUS**2:
             if random() < 0.002:
                 choice(self.game.alien_cry_sounds).play()
             self.index = (self.index + 0.1) % 2
@@ -387,18 +388,18 @@ class Aranha(pg.sprite.Sprite):
         if self.health <= 0:
             choice(self.game.alien_hit_sounds).play()
             self.kill()
-            self.game.map_img.blit(self.game.aranhaSplat, self.pos - vec(32, 32))
+            self.game.map_img.blit(self.game.spiderSplat, self.pos - vec(32, 32))
 
     def draw_health(self):
-        if (self.health > 0.6 * ARANHA_HEALTH):
+        if (self.health > 0.6 * SPIDER_HEALTH):
             col = GREEN
-        elif (self.health > 0.3 * ARANHA_HEALTH):
+        elif (self.health > 0.3 * SPIDER_HEALTH):
             col = YELLOW
         else:
             col = RED
-        width = int(self.rect.width * self.health / ARANHA_HEALTH)
+        width = int(self.rect.width * self.health / SPIDER_HEALTH)
         self.health_bar = pg.Rect(0, 0, width, 7)
-        if self.health < ARANHA_HEALTH:
+        if self.health < SPIDER_HEALTH:
             pg.draw.rect(self.image, col, self.health_bar)
 
 

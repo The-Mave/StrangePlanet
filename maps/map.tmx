@@ -908,30 +908,30 @@
   <object id="2173" name="alien" x="15308" y="12456"/>
   <object id="2174" name="alien" x="16452" y="12704"/>
   <object id="2175" name="alien" x="17200" y="11828"/>
-  <object id="2970" name="aranha" x="17760" y="6336"/>
-  <object id="2971" name="aranha" x="17376" y="7008"/>
-  <object id="2972" name="aranha" x="16576" y="8896"/>
-  <object id="2973" name="aranha" x="15568" y="9536"/>
-  <object id="2974" name="aranha" x="11552" y="4896"/>
-  <object id="2975" name="aranha" x="14752" y="9632"/>
-  <object id="2976" name="aranha" x="15808" y="11056"/>
-  <object id="2977" name="aranha" x="15712" y="12976"/>
-  <object id="2978" name="aranha" x="17952" y="11552"/>
-  <object id="2979" name="aranha" x="17728" y="10224"/>
-  <object id="2980" name="aranha" x="17744" y="10560"/>
-  <object id="2981" name="aranha" x="15904" y="13440"/>
-  <object id="2982" name="aranha" x="18032" y="8288"/>
-  <object id="2983" name="aranha" x="18496" y="7152"/>
-  <object id="2984" name="aranha" x="15664" y="4896"/>
-  <object id="2985" name="aranha" x="13808" y="8736"/>
-  <object id="2986" name="aranha" x="10976" y="5504"/>
-  <object id="2987" name="aranha" x="12176" y="5920"/>
-  <object id="2988" name="aranha" x="14112" y="6880"/>
-  <object id="2989" name="aranha" x="13888" y="5088"/>
-  <object id="2990" name="aranha" x="14800" y="8160"/>
-  <object id="2991" name="aranha" x="16768" y="9648"/>
+  <object id="2970" name="spider" x="17760" y="6336"/>
+  <object id="2971" name="spider" x="17376" y="7008"/>
+  <object id="2972" name="spider" x="16576" y="8896"/>
+  <object id="2973" name="spider" x="15568" y="9536"/>
+  <object id="2974" name="spider" x="11552" y="4896"/>
+  <object id="2975" name="spider" x="14752" y="9632"/>
+  <object id="2976" name="spider" x="15808" y="11056"/>
+  <object id="2977" name="spider" x="15712" y="12976"/>
+  <object id="2978" name="spider" x="17952" y="11552"/>
+  <object id="2979" name="spider" x="17728" y="10224"/>
+  <object id="2980" name="spider" x="17744" y="10560"/>
+  <object id="2981" name="spider" x="15904" y="13440"/>
+  <object id="2982" name="spider" x="18032" y="8288"/>
+  <object id="2983" name="spider" x="18496" y="7152"/>
+  <object id="2984" name="spider" x="15664" y="4896"/>
+  <object id="2985" name="spider" x="13808" y="8736"/>
+  <object id="2986" name="spider" x="10976" y="5504"/>
+  <object id="2987" name="spider" x="12176" y="5920"/>
+  <object id="2988" name="spider" x="14112" y="6880"/>
+  <object id="2989" name="spider" x="13888" y="5088"/>
+  <object id="2990" name="spider" x="14800" y="8160"/>
+  <object id="2991" name="spider" x="16768" y="9648"/>
   <object id="3073" x="18184" y="5752"/>
-  <object id="3075" name="aranha" x="18568" y="5808"/>
+  <object id="3075" name="spider" x="18568" y="5808"/>
   <object id="2176" name="wall" x="2" y="17730" width="65" height="63.5"/>
   <object id="2177" name="wall" x="65.5" y="17793.8" width="65" height="63.5"/>
   <object id="2178" name="wall" x="128" y="17860.3" width="65" height="63.5"/>
@@ -1873,7 +1873,7 @@
   <object id="923" name="wall" x="5901.02" y="15244.5" width="110" height="160"/>
   <object id="924" name="wall" x="6228.29" y="15117.2" width="110" height="160"/>
   <object id="925" name="wall" x="5973.74" y="14980.8" width="110" height="160"/>
-  <object id="926" name="wall" x="5591.92" y="14993" width="110" height="160"/>
+  <object id="926" name="wall" x="5604.04" y="15023.3" width="97.8788" height="129.697"/>
   <object id="927" name="wall" x="5201.02" y="14920.2" width="110" height="160"/>
   <object id="928" name="wall" x="3658.59" y="14986.9" width="110" height="160"/>
   <object id="929" name="wall" x="3916.17" y="14853.6" width="110" height="160"/>
@@ -1889,8 +1889,8 @@
   <object id="939" name="wall" x="5001.02" y="14593" width="110" height="160"/>
   <object id="940" name="wall" x="5258.59" y="14547.5" width="110" height="160"/>
   <object id="941" name="wall" x="5194.95" y="14726.3" width="110" height="160"/>
-  <object id="942" name="wall" x="5455.56" y="14799" width="110" height="160"/>
-  <object id="943" name="wall" x="5710.11" y="14805.1" width="110" height="160"/>
+  <object id="942" name="wall" x="5455.56" y="14799" width="88.7879" height="138.788"/>
+  <object id="943" name="wall" x="5728.29" y="14805.1" width="91.8182" height="138.788"/>
   <object id="944" name="wall" x="3973.74" y="14220.2" width="110" height="160"/>
   <object id="945" name="wall" x="4546.47" y="14217.2" width="110" height="160"/>
   <object id="946" name="wall" x="4282.83" y="13896" width="110" height="160"/>

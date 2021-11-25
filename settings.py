@@ -65,7 +65,7 @@ ALIEN_KNOCKBACK = 20
 AVOID_RADIUS = 50
 DETECT_RADIUS = 400
 BOSS_DETECT_RADIUS = 800
-ARANHA_DETECT_RADIUS = 1200
+SPIDER_DETECT_RADIUS = 1200
 
 # Configurações do alien de fogo
 FIRE_ALIEN_IMG = ['fireAlien1.png','fireAlien2.png']
@@ -83,21 +83,22 @@ BOSS_HEALTH = 360
 BOSS_DAMAGE = 35
 BOSS_KNOCKBACK = 30
 
-# Configurações da aranha
-ARANHA_IMG = ['aranha.png','aranha2.png']
-ARANHA_SPEEDS = [90, 110, 130, 150]
-ARANHA_HIT_RECT = pg.Rect(0, 0, 30, 30)
-ARANHA_HEALTH = 430
-ARANHA_DAMAGE = 35
-ARANHA_KNOCKBACK = 30
+# Configurações da spider
+SPIDER_IMG = ['spider.png','spider2.png']
+SPIDER_SPEEDS = [90, 110, 130, 150]
+SPIDER_HIT_RECT = pg.Rect(0, 0, 30, 30)
+SPIDER_HEALTH = 400
+SPIDER_DAMAGE = 35
+SPIDER_KNOCKBACK = 30
 
 # Configurações da lava
-LAVA_DAMAGE = 2
+LAVA_DAMAGE = 0.2
 
 # Efeitos
 MUZZLE_FLASHES = ['whitePuff1.png', 'whitePuff2.png', 'whitePuff3.png', 'whitePuff4.png']
 SPLAT = 'splat green.png'
 RADAR = 'radar.png'
+HOW_TO_PLAY = 'howToPlay.png'
 FIRE_SPLAT = 'splat red.png'
 FLASH_DURATION = 50
 DAMAGE_ALPHA = [i for i in range(0, 255, 55)]
@@ -112,7 +113,7 @@ BULLET_LAYER = 4
 ALIEN_LAYER = 2
 FIRE_ALIEN_LAYER = 2
 BOSS_LAYER = 2
-ARANHA_LAYER = 2
+SPIDER_LAYER = 2
 EFFECTS_LAYER = 5
 ITEMS_LAYER = 1
 
@@ -120,7 +121,7 @@ ITEMS_LAYER = 1
 ITEM_IMAGES = {'health': 'health.png',
                'shotgun': 'obj_shotgun.png',
                'leg': 'leg.png',
-               'aranha_olho': 'aranha_olho.png'
+               'eye': 'spider_eye.png'
                }
 HEALTH_PACK_AMOUNT = 25
 LEG_AMOUNT = 50

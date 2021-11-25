@@ -70,16 +70,16 @@ class Game:
         self.fireAlien_img = self.fireAlien_imgs[index]
         self.boss_imgs = [pg.image.load(path.join(img_folder, BOSS_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, BOSS_IMG[1])).convert_alpha()]
         self.boss_img = self.boss_imgs[index]
-        self.aranha_imgs = [pg.image.load(path.join(img_folder, ARANHA_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, ARANHA_IMG[1])).convert_alpha()]
-        self.aranha_img = self.aranha_imgs[index]
+        self.spider_imgs = [pg.image.load(path.join(img_folder, SPIDER_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, SPIDER_IMG[1])).convert_alpha()]
+        self.spider_img = self.spider_imgs[index]
         self.splat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.splat = pg.transform.scale(self.splat, (64, 64))
         self.fireSplat = pg.image.load(path.join(img_folder, FIRE_SPLAT)).convert_alpha()
         self.fireSplat = pg.transform.scale(self.fireSplat, (64, 64))
         self.bossSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.bossSplat = pg.transform.scale(self.splat, (128, 128))
-        self.aranhaSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
-        self.aranhaSplat = pg.transform.scale(self.splat, (128, 128))
+        self.spiderSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
+        self.spiderSplat = pg.transform.scale(self.splat, (128, 128))
         self.gun_flashes = []
         for img in MUZZLE_FLASHES:
             self.gun_flashes.append(pg.image.load(path.join(img_folder, img)).convert_alpha())
@@ -87,6 +87,7 @@ class Game:
         for item in ITEM_IMAGES:
             self.item_images[item] = pg.image.load(path.join(img_folder, ITEM_IMAGES[item])).convert_alpha()
         self.radar_img = pg.image.load(path.join(img_folder, RADAR)).convert_alpha()
+        self.tutorial_img = pg.image.load(path.join(img_folder, HOW_TO_PLAY)).convert_alpha()
         # efeito de luz
         self.fog = pg.Surface((WIDTH, HEIGHT))
         self.fog.fill(NIGHT_COLOR)
@@ -139,8 +140,8 @@ class Game:
                 FireAlien(self, obj_center.x, obj_center.y)
             if tile_object.name == 'boss':
                 Boss(self, obj_center.x, obj_center.y)
-            if tile_object.name == 'aranha':
-                Aranha(self, obj_center.x, obj_center.y)
+            if tile_object.name == 'spider':
+                Spider(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y,
                          tile_object.width, tile_object.height)
@@ -189,6 +190,10 @@ class Game:
                 hit.kill()
                 self.effects_sounds['health_up'].play()
                 self.player.add_health(LEG_AMOUNT)
+            if hit.type == 'eye' and self.player.health < PLAYER_HEALTH:
+                hit.kill()
+                self.effects_sounds['health_up'].play()
+                self.player.add_health(EYE_AMOUNT)
             if hit.type == 'shotgun':
                 hit.kill()
                 self.effects_sounds['gun_pickup'].play()
@@ -212,8 +217,8 @@ class Game:
                     self.player.health -= ALIEN_DAMAGE
                 elif (type(hit)==FireAlien):
                     self.player.health -= FIRE_ALIEN_DAMAGE
-                elif (type(hit)==Aranha):
-                    self.player.health -= ARANHA_DAMAGE
+                elif (type(hit)==Spider):
+                    self.player.health -= SPIDER_DAMAGE
                 else:
                     self.player.health -= BOSS_DAMAGE
 
@@ -230,15 +235,13 @@ class Game:
                 alien.health -= bullet.damage
                 if (type(alien)==Boss and alien.health <= 0):
                     Item(self, alien.pos + vec(32, 32), 'leg')
-                if (type(alien)==Aranha and alien.health <= 0):
-                    Item(self, alien.pos + vec(32, 32), 'aranha_olho')
+                if (type(alien)==Spider and alien.health <= 0):
+                    Item(self, alien.pos + vec(32, 32), 'eye')
 
             alien.vel = vec(0, 0)
     def draw_radar(self):
         self.radar_rect = self.radar_img.get_rect()
-        # self.radar_rect.center = (250,250)
         self.screen.blit(self.radar_img, (WIDTH/2-599/2, HEIGHT/2-599/2))
-        # pg.draw.rect(self.screen, BLACK, (0,50,200,200))
         x,y = self.player.pos
         x_radplayer = ((x*599)/19200) + (WIDTH - 599)/2
         y_radplayer = ((y*599)/19200) + (HEIGHT - 599)/2
@@ -274,7 +277,7 @@ class Game:
             if isinstance(sprite, Boss):
                 sprite.draw_health()
             self.screen.blit(sprite.image, self.camera.apply(sprite))
-            if isinstance(sprite, Aranha):
+            if isinstance(sprite, Spider):
                 sprite.draw_health()
             self.screen.blit(sprite.image, self.camera.apply(sprite))
             if self.draw_debug:
@@ -284,7 +287,7 @@ class Game:
             for wall in self.walls:
                 pg.draw.rect(self.screen, CYAN, self.camera.apply_rect(wall.rect), 1)
             for lava in self.lavas:
-                pg.draw.rect(self.screen, RED, self.camera.apply_rect(lava.rect), 1)
+                pg.draw.rect(self.screen, GREEN, self.camera.apply_rect(lava.rect), 1)
         if self.radarzin:
             self.draw_radar()
 
@@ -350,6 +353,7 @@ class Game:
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
+        pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
 
     def show_go_screen(self):
         self.screen.fill(BLACK)
@@ -363,6 +367,7 @@ class Game:
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
         self.wait_for_key()
+        pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
     
     def show_start_screen(self):
         self.screen.fill(BROWN)
@@ -375,7 +380,15 @@ class Game:
         self.draw_text("Press any key to start", self.title_font, 50, WHITE,
                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
         pg.display.flip()
+
         self.wait_for_key()
+        self.screen.fill(BROWN)
+        self.tutorial_rect = self.tutorial_img.get_rect()
+        self.screen.blit(self.tutorial_img, (WIDTH/2-self.tutorial_rect.width/2, HEIGHT/2-self.tutorial_rect.height/2))
+        pg.display.flip()
+        
+        self.wait_for_key()
+        pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
 
     def wait_for_key(self):
         game_folder = path.dirname(__file__)
@@ -390,7 +403,6 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
-                    pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
 
 # estanciar objeto do jogo
 g = Game()
