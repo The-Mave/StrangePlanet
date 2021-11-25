@@ -70,12 +70,16 @@ class Game:
         self.fireAlien_img = self.fireAlien_imgs[index]
         self.boss_imgs = [pg.image.load(path.join(img_folder, BOSS_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, BOSS_IMG[1])).convert_alpha()]
         self.boss_img = self.boss_imgs[index]
+        self.aranha_imgs = [pg.image.load(path.join(img_folder, ARANHA_IMG[0])).convert_alpha(), pg.image.load(path.join(img_folder, ARANHA_IMG[1])).convert_alpha()]
+        self.aranha_img = self.aranha_imgs[index]
         self.splat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.splat = pg.transform.scale(self.splat, (64, 64))
         self.fireSplat = pg.image.load(path.join(img_folder, FIRE_SPLAT)).convert_alpha()
         self.fireSplat = pg.transform.scale(self.fireSplat, (64, 64))
         self.bossSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.bossSplat = pg.transform.scale(self.splat, (128, 128))
+        self.aranhaSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
+        self.aranhaSplat = pg.transform.scale(self.splat, (128, 128))
         self.gun_flashes = []
         for img in MUZZLE_FLASHES:
             self.gun_flashes.append(pg.image.load(path.join(img_folder, img)).convert_alpha())
@@ -135,6 +139,8 @@ class Game:
                 FireAlien(self, obj_center.x, obj_center.y)
             if tile_object.name == 'boss':
                 Boss(self, obj_center.x, obj_center.y)
+            if tile_object.name == 'aranha':
+                Aranha(self, obj_center.x, obj_center.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y,
                          tile_object.width, tile_object.height)
@@ -206,6 +212,8 @@ class Game:
                     self.player.health -= ALIEN_DAMAGE
                 elif (type(hit)==FireAlien):
                     self.player.health -= FIRE_ALIEN_DAMAGE
+                elif (type(hit)==Aranha):
+                    self.player.health -= ARANHA_DAMAGE
                 else:
                     self.player.health -= BOSS_DAMAGE
 
@@ -222,6 +230,8 @@ class Game:
                 alien.health -= bullet.damage
                 if (type(alien)==Boss and alien.health <= 0):
                     Item(self, alien.pos + vec(32, 32), 'leg')
+                if (type(alien)==Aranha and alien.health <= 0):
+                    Item(self, alien.pos + vec(32, 32), 'aranha_olho')
 
             alien.vel = vec(0, 0)
     def draw_radar(self):
@@ -230,8 +240,8 @@ class Game:
         self.screen.blit(self.radar_img, (WIDTH/2-599/2, HEIGHT/2-599/2))
         # pg.draw.rect(self.screen, BLACK, (0,50,200,200))
         x,y = self.player.pos
-        x_radplayer = ((x*WIDTH)/19200)
-        y_radplayer = ((y*HEIGHT)/19200)
+        x_radplayer = ((x*599)/19200) + (WIDTH - 599)/2
+        y_radplayer = ((y*599)/19200) + (HEIGHT - 599)/2
 
         pg.draw.rect(self.screen,RED,(x_radplayer,y_radplayer,10,10))
 
@@ -262,6 +272,9 @@ class Game:
             if isinstance(sprite, FireAlien):
                 sprite.draw_health()
             if isinstance(sprite, Boss):
+                sprite.draw_health()
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
+            if isinstance(sprite, Aranha):
                 sprite.draw_health()
             self.screen.blit(sprite.image, self.camera.apply(sprite))
             if self.draw_debug:
