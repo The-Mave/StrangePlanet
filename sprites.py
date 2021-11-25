@@ -187,7 +187,6 @@ class Alien(pg.sprite.Sprite):
             choice(self.game.alien_hit_sounds).play()
             self.kill()
             self.game.map_img.blit(self.game.splat, self.pos - vec(32, 32))
-
     def draw_health(self):
         if (self.health > 0.6 * ALIEN_HEALTH):
             col = GREEN

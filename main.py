@@ -82,6 +82,7 @@ class Game:
         self.item_images = {}
         for item in ITEM_IMAGES:
             self.item_images[item] = pg.image.load(path.join(img_folder, ITEM_IMAGES[item])).convert_alpha()
+        self.radar_img = pg.image.load(path.join(img_folder, RADAR)).convert_alpha()
         # efeito de luz
         self.fog = pg.Surface((WIDTH, HEIGHT))
         self.fog.fill(NIGHT_COLOR)
@@ -144,6 +145,7 @@ class Game:
                 Item(self, obj_center, tile_object.name)
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
+        self.radarzin = False
         self.paused = False
         self.night = False
         self.godMode = False
@@ -222,7 +224,18 @@ class Game:
                     Item(self, alien.pos + vec(32, 32), 'leg')
 
             alien.vel = vec(0, 0)
+    def draw_radar(self):
+        self.radar_rect = self.radar_img.get_rect()
+        # self.radar_rect.center = (250,250)
+        self.screen.blit(self.radar_img, (WIDTH/2-599/2, HEIGHT/2-599/2))
+        # pg.draw.rect(self.screen, BLACK, (0,50,200,200))
+        x,y = self.player.pos
+        x_radplayer = ((x*WIDTH)/19200)
+        y_radplayer = ((y*HEIGHT)/19200)
 
+        pg.draw.rect(self.screen,RED,(x_radplayer,y_radplayer,10,10))
+
+        pass
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
@@ -259,6 +272,8 @@ class Game:
                 pg.draw.rect(self.screen, CYAN, self.camera.apply_rect(wall.rect), 1)
             for lava in self.lavas:
                 pg.draw.rect(self.screen, RED, self.camera.apply_rect(lava.rect), 1)
+        if self.radarzin:
+            self.draw_radar()
 
  
         if self.night:
@@ -286,6 +301,8 @@ class Game:
                     self.quit()
                 if event.key == pg.K_h:
                     self.draw_debug = not self.draw_debug
+                if event.key == pg.K_x:
+                    self.radarzin = not self.radarzin
                 if event.key == pg.K_q:
                     self.godMode = not self.godMode
                 if event.key == pg.K_p:
