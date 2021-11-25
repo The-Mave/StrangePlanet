@@ -240,6 +240,11 @@ class Game:
 
             alien.vel = vec(0, 0)
     def draw_radar(self):
+        s = pg.Surface((WIDTH,HEIGHT))  
+        s.set_alpha(200)              
+        s.fill((0,0,0))          
+        self.screen.blit(s, (0,0))    
+
         self.radar_rect = self.radar_img.get_rect()
         self.screen.blit(self.radar_img, (WIDTH/2-599/2, HEIGHT/2-599/2))
         x,y = self.player.pos
