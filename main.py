@@ -235,10 +235,10 @@ class Game:
 
             alien.vel = vec(0, 0)
     def draw_radar(self):
-        s = pg.Surface((WIDTH,HEIGHT))  # the size of your rect
-        s.set_alpha(200)                # alpha level
-        s.fill((0,0,0))           # this fills the entire surface
-        self.screen.blit(s, (0,0))    # (0,0) are the top-left coordinates
+        s = pg.Surface((WIDTH,HEIGHT))  
+        s.set_alpha(200)              
+        s.fill((0,0,0))          
+        self.screen.blit(s, (0,0))    
 
         self.radar_rect = self.radar_img.get_rect()
         # self.radar_rect.center = (250,250)
