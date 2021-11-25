@@ -88,6 +88,7 @@ LAVA_DAMAGE = 0.1
 # Efeitos
 MUZZLE_FLASHES = ['whitePuff1.png', 'whitePuff2.png', 'whitePuff3.png', 'whitePuff4.png']
 SPLAT = 'splat green.png'
+RADAR = 'radar.png'
 FIRE_SPLAT = 'splat red.png'
 FLASH_DURATION = 50
 DAMAGE_ALPHA = [i for i in range(0, 255, 55)]
