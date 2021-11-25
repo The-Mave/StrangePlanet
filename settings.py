@@ -65,6 +65,7 @@ ALIEN_KNOCKBACK = 20
 AVOID_RADIUS = 50
 DETECT_RADIUS = 400
 BOSS_DETECT_RADIUS = 800
+ARANHA_DETECT_RADIUS = 1200
 
 # Configurações do alien de fogo
 FIRE_ALIEN_IMG = ['fireAlien1.png','fireAlien2.png']
@@ -82,8 +83,16 @@ BOSS_HEALTH = 360
 BOSS_DAMAGE = 35
 BOSS_KNOCKBACK = 30
 
+# Configurações da aranha
+ARANHA_IMG = ['aranha.png','aranha2.png']
+ARANHA_SPEEDS = [90, 110, 130, 150]
+ARANHA_HIT_RECT = pg.Rect(0, 0, 30, 30)
+ARANHA_HEALTH = 430
+ARANHA_DAMAGE = 35
+ARANHA_KNOCKBACK = 30
+
 # Configurações da lava
-LAVA_DAMAGE = 0.1
+LAVA_DAMAGE = 2
 
 # Efeitos
 MUZZLE_FLASHES = ['whitePuff1.png', 'whitePuff2.png', 'whitePuff3.png', 'whitePuff4.png']
@@ -103,17 +112,21 @@ BULLET_LAYER = 4
 ALIEN_LAYER = 2
 FIRE_ALIEN_LAYER = 2
 BOSS_LAYER = 2
+ARANHA_LAYER = 2
 EFFECTS_LAYER = 5
 ITEMS_LAYER = 1
 
 # Itens
 ITEM_IMAGES = {'health': 'health.png',
                'shotgun': 'obj_shotgun.png',
-               'leg': 'leg.png'}
+               'leg': 'leg.png',
+               'aranha_olho': 'aranha_olho.png'
+               }
 HEALTH_PACK_AMOUNT = 25
 LEG_AMOUNT = 50
 BOB_RANGE = 10
 BOB_SPEED = 0.3
+EYE_AMOUNT = 80
 
 # Sons / Músicas
 BG_MUSIC = 'brinstar.wav'
