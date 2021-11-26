@@ -88,6 +88,7 @@ class Game:
             self.item_images[item] = pg.image.load(path.join(img_folder, ITEM_IMAGES[item])).convert_alpha()
         self.radar_img = pg.image.load(path.join(img_folder, RADAR)).convert_alpha()
         self.tutorial_img = pg.image.load(path.join(img_folder, HOW_TO_PLAY)).convert_alpha()
+        self.tutorial_img = pg.transform.scale(self.tutorial_img, (round(HEIGHT*1100/880), round(HEIGHT)))
         # efeito de luz
         self.fog = pg.Surface((WIDTH, HEIGHT))
         self.fog.fill(NIGHT_COLOR)

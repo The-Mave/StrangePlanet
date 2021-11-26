@@ -111,7 +111,7 @@
   <object id="678" name="wall" x="8366.67" y="5612" width="46.6667" height="258.667"/>
   <object id="679" name="wall" x="1514.67" y="5508.97" width="6852" height="163.03"/>
   <object id="2968" x="6772.73" y="10451.5" width="87.8788" height="103.03"/>
-  <object id="2969" x="5124.24" y="15269.7" width="369.697" height="109.091"/>
+  <object id="2969" name="wall" x="5124.24" y="15269.7" width="369.697" height="109.091"/>
   <object id="684" name="alien" x="927.273" y="12575.8"/>
   <object id="685" name="alien" x="790.909" y="12690.9"/>
   <object id="686" name="alien" x="733.333" y="12812.1"/>
