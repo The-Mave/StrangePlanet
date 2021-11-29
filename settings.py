@@ -147,3 +147,8 @@ INTRO = 'intro.wav'
 #Hit rects
 ITEM_HIT_RECT = pg.Rect(0, 0, 30, 30)
 BULLET_HIT_RECT = pg.Rect(0, 0, 15, 15)
+
+# Intro images
+INTRO_BASIC = 'base.png'
+COMET1 = ['Comet1_1.png', 'Comet1_2.png', 'Comet1_3.png', 'Comet1_4.png', 'Comet1_5.png', 'Comet1_6.png', 'Comet1_7.png']
+COMET2 = ['Comet2_1.png', 'Comet2_2.png', 'Comet2_3.png', 'Comet2_4.png', 'Comet2_5.png', 'Comet2_6.png', 'base.png']

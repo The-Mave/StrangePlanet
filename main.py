@@ -6,6 +6,7 @@ from settings import *
 from sprites import *
 from tilemap import *
 from spritesheet import Spritesheet
+import time
 
 index = 0
 
@@ -46,6 +47,7 @@ class Game:
         img_folder = path.join(game_folder, 'img')
         snd_folder = path.join(game_folder, 'snd')
         music_folder = path.join(game_folder, 'music')
+        movie_folder = path.join(game_folder, 'movie')
         self.map_folder = path.join(game_folder, 'maps')
         self.title_font = path.join(img_folder, 'game_of_squids.TTF')
         self.hud_font = path.join(img_folder, 'ethnocentric.ttf')
@@ -80,6 +82,10 @@ class Game:
         self.bossSplat = pg.transform.scale(self.splat, (128, 128))
         self.spiderSplat = pg.image.load(path.join(img_folder, SPLAT)).convert_alpha()
         self.spiderSplat = pg.transform.scale(self.splat, (128, 128))
+        self.comet1_imgs = [pg.image.load(path.join(movie_folder, COMET1[0])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET1[1])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET1[2])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET1[3])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET1[4])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET1[5])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET1[6])).convert_alpha()]
+        self.comet2_imgs = [pg.image.load(path.join(movie_folder, COMET2[0])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET2[1])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET2[2])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET2[3])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET2[4])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET2[5])).convert_alpha(), pg.image.load(path.join(movie_folder, COMET2[6])).convert_alpha()]
+        self.intro_basic = pg.image.load(path.join(movie_folder, INTRO_BASIC)).convert_alpha()
+        self.intro_basic = pg.transform.scale(self.intro_basic, (WIDTH, HEIGHT))
         self.gun_flashes = []
         for img in MUZZLE_FLASHES:
             self.gun_flashes.append(pg.image.load(path.join(img_folder, img)).convert_alpha())
@@ -268,9 +274,6 @@ class Game:
         self.fog.blit(self.light_mask, self.light_rect)
         self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
 
-    # def damageTaken(surf, scale):
-    #     GB = min(255, max(0, round(255 * (1-scale))))
-    #     surf.fill((255, GB, GB), special_flags = pg.BLEND_MULT)
 
     def draw(self):
         self.screen.blit(self.map_img, self.camera.apply(self.map))
@@ -376,29 +379,58 @@ class Game:
         pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
     
     def show_start_screen(self):
-        self.screen.fill(BROWN)
         game_folder = path.dirname(__file__)
         music_folder = path.join(game_folder, 'music')
         pg.mixer.music.load(path.join(music_folder, INTRO))
         pg.mixer.music.play(loops=-1)
-        self.draw_text("STRANGE PLANET", self.title_font, 130, GREEN,
-                       WIDTH / 2, HEIGHT / 2, align="center")
-        self.draw_text("Press any key to start", self.title_font, 50, WHITE,
-                       WIDTH / 2, HEIGHT * 3 / 4, align="center")
-        pg.display.flip()
+        intro_playing = True
+        while intro_playing:
+            aleatorio = choice([1,2,0,0,0,0,0,0,0])
+            if aleatorio == 0:
+                self.screen.blit(self.intro_basic, (0, 0))
+                self.draw_text("STRANGE PLANET", self.title_font, 130, GREEN,
+                        WIDTH / 2, HEIGHT / 2, align="center")
+                self.draw_text("Press any key to start", self.title_font, 50, WHITE,
+                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
+                pg.draw.rect(self.screen, BLACK, (0, 0, WIDTH/12,HEIGHT/8))
+                pg.display.flip()
+                time.sleep(1)
+            elif aleatorio == 1:
+                for comet in self.comet1_imgs:
+                    self.screen.blit(pg.transform.scale(comet, (WIDTH, HEIGHT)), (0, 0))
+                    self.draw_text("STRANGE PLANET", self.title_font, 130, GREEN,
+                        WIDTH / 2, HEIGHT / 2, align="center")
+                    self.draw_text("Press any key to start", self.title_font, 50, WHITE,
+                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
+                    pg.draw.rect(self.screen, BLACK, (0, 0, WIDTH/12,HEIGHT/8))
+                    pg.display.flip()
+                    time.sleep(0.05)
+            elif aleatorio == 2:
+                for comet in self.comet2_imgs:
+                    self.screen.blit(pg.transform.scale(comet, (WIDTH, HEIGHT)), (0, 0))
+                    self.draw_text("STRANGE PLANET", self.title_font, 130, GREEN,
+                        WIDTH / 2, HEIGHT / 2, align="center")
+                    self.draw_text("Press any key to start", self.title_font, 50, WHITE,
+                        WIDTH / 2, HEIGHT * 3 / 4, align="center")
+                    pg.draw.rect(self.screen, BLACK, (0, 0, WIDTH/12,HEIGHT/8))
+                    pg.display.flip()
+                    time.sleep(0.05)
 
-        self.wait_for_key()
+            
+            for event in pg.event.get():
+                if event.type == pg.KEYUP:
+                    intro_playing = False
+            
         self.screen.fill(BROWN)
         self.tutorial_rect = self.tutorial_img.get_rect()
         self.screen.blit(self.tutorial_img, (WIDTH/2-self.tutorial_rect.width/2, HEIGHT/2-self.tutorial_rect.height/2))
         pg.display.flip()
-        
+                        
         self.wait_for_key()
+
         pg.mixer.music.load(path.join(music_folder, BG_MUSIC))
 
     def wait_for_key(self):
-        game_folder = path.dirname(__file__)
-        music_folder = path.join(game_folder, 'music')
         pg.event.wait()
         waiting = True
         while waiting:
